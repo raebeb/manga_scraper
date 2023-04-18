@@ -1,64 +1,35 @@
-import json
+from utils import check_manga_url, download_manga
 
-import requests
-from bs4 import BeautifulSoup
-import os
 
-# Set the URL and the parent directory to save the images
-initial_chapter = int(input('Enter the initial chapter: '))
-final_chapter = int(input('Enter the final chapter: '))
-url_template = 'https://www.mangatigre.net/manga/vinland-saga/{chapter}'
-parent_dir = 'vinland_saga'
+print('                                    ───── ⋆⋅☆⋅⋆ ─────')
+print('                          Welcome to the Manga Tigre Downloader')
+print('                                    ───── ⋆⋅☆⋅⋆ ─────')
+print('Select an option:')
+option = int(input('1.- Download all chapters\n2.- Download from chapter x to chapter y\n3.- Download chapter x\n4.- Download the last chapter\n 0.- Exit\n Enter the option:  '))
 
-# Create the parent directory if it doesn't exist
-if not os.path.exists(parent_dir):
-    os.makedirs(parent_dir)
+while 5 < option < 0:
+    print('Invalid option, please try again')
+    option = int(input('1.- Download all chapters\n2.- Download from chapter x to chapter y\n3.- Download chapter x\n4.- Download the last chapter\n 0.- Exit\n Enter the option:  '))
 
-# Iterate over the chapters and download the images
+if option == 1:
+    manga_title = input('Enter the manga title: ')
+    download_manga(manga_title=manga_title)
+elif option == 2:
+    manga_title = input('Enter the manga title: ')
+    initial_chapter = int(input('Enter the initial chapter: '))
+    final_chapter = int(input('Enter the final chapter: '))
+    download_manga(initial_chapter=initial_chapter, final_chapter=final_chapter, manga_title=manga_title)
 
-percent = 0
+elif option == 3:
+    manga_title = input('Enter the manga title: ')
+    chapter = int(input('Enter the chapter: '))
+    download_manga(initial_chapter=chapter, final_chapter=chapter, manga_title=manga_title)
 
-for chapter in range(initial_chapter, final_chapter + 1):
-    percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2)
-    # Construct the URL for the current chapter
-    print(f'Downloading chapter {chapter}... {percent}%')
-    url = url_template.format(chapter=chapter)
+elif option == 4:
+    manga_title = input('Enter the manga title: ')
+    final_chapter = check_manga_url(manga_title)
+    download_manga(manga_title=manga_title, download_last_chapter=True)
 
-    # Send a GET request to the URL
-    response = requests.get(url)
+elif option == 0:
+    print('Bye!')
 
-    # Parse the HTML with BeautifulSoup
-    soup = BeautifulSoup(response.text, 'html.parser')
-    scripts = soup.findAll('script')
-    window_chapter = scripts[8].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
-    chapter_dict = json.loads(window_chapter)
-    images = chapter_dict['images']
-    # print(chapter_dict['images'])
-
-    images_list = []
-    for image in images:
-        image_name = images[image]['name']
-        image_url = f'https://i2.mtcdn.xyz/chapters/vinland-saga/{chapter}/{image_name}.webp'
-        images_list.append(image_url)
-
-   # Create a directory for the current chapter
-    chapter_dir = f'{parent_dir}/chapter_{chapter}'
-    if not os.path.exists(chapter_dir):
-        os.makedirs(chapter_dir)
-
-    # Find all the images on the page
-
-    # Download each image
-    for image_url in images_list:
-        # Construct the file name
-        file_name = image_url.split('/')[-1]
-        file_path = f'{chapter_dir}/{file_name}'
-
-        # Send a GET request to the image URL
-        response = requests.get(image_url, stream=True)
-        # print(response.content)
-
-        # Save the image to disk
-        with open(file_path, 'wb') as f:
-            f.write(response.content)
-    print(f'Chapter {chapter} downloaded! {percent}%')
