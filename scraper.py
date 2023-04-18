@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 import os
 
 # Set the URL and the parent directory to save the images
-initial_chapter = 130
-final_chapter = 200
+initial_chapter = int(input('Enter the initial chapter: '))
+final_chapter = int(input('Enter the final chapter: '))
 url_template = 'https://www.mangatigre.net/manga/vinland-saga/{chapter}'
 parent_dir = 'vinland_saga'
 
@@ -15,8 +15,13 @@ if not os.path.exists(parent_dir):
     os.makedirs(parent_dir)
 
 # Iterate over the chapters and download the images
+
+percent = 0
+
 for chapter in range(initial_chapter, final_chapter + 1):
+    percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2)
     # Construct the URL for the current chapter
+    print(f'Downloading chapter {chapter}... {percent}%')
     url = url_template.format(chapter=chapter)
 
     # Send a GET request to the URL
@@ -56,3 +61,4 @@ for chapter in range(initial_chapter, final_chapter + 1):
         # Save the image to disk
         with open(file_path, 'wb') as f:
             f.write(response.content)
+    print(f'Chapter {chapter} downloaded! {percent}%')
