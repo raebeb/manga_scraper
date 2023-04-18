@@ -94,10 +94,11 @@ def download_manga(initial_chapter:int = None, final_chapter:int = None, manga_t
             os.makedirs(chapter_dir)
 
         # Download each image
+        count = 1
         for image_url in images_list:
             # Construct the file name
             file_name = image_url.split('/')[-1]
-            file_path = f'{chapter_dir}/{file_name}'
+            file_path = f'{chapter_dir}/image{count}_{file_name}'
 
             # Send a GET request to the image URL
             response = requests.get(image_url, stream=True)
@@ -106,4 +107,6 @@ def download_manga(initial_chapter:int = None, final_chapter:int = None, manga_t
             # Save the image to disk
             with open(file_path, 'wb') as f:
                 f.write(response.content)
+
+            count += 1
         print(f'Chapter {chapter} downloaded! {percent}%')
