@@ -1,6 +1,7 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
 # MANGA DOWNLOADER 🚣📄🗺
 Queria leer vinland saga en mi kindle, pero no encontraba donde descargarlo asi que me vi en la obligacion de hacer un script que descargue las imagenes para luego pasarlas a formato MOBI  
+Luego de descargar los capitulos que queria leer me di cuenta que podria hacer que el script funcionara para cualquier manga, asi fue que nacio esto ฅ^•ﻌ•^ฅ  
 Las imagenes son descargadas de https://www.mangatigre.net/
 
 
