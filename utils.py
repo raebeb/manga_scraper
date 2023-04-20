@@ -19,12 +19,8 @@ def check_manga_url(manga_title: str) -> str:
     manga_url = f'https://www.mangatigre.net/manga/{manga_title}'
 
     check_url = requests.get(manga_url)
-    while check_url.status_code != 200:
-        print('Manga not found, please try again')
-        manga_title = input('Enter the manga title: ')
-        manga_title = manga_title.replace(' ', '-')
-        manga_url = f'https://www.mangatigre.net/manga/{manga_title}'
-        check_url = requests.get(manga_url)
+    if check_url.status_code != 200:
+        raise Exception('Manga not found, please try again')
 
     return manga_url
 
