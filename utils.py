@@ -1,10 +1,9 @@
 import json
 import os
-import requests
-
-from bs4 import BeautifulSoup
 from typing import Optional
 
+import requests
+from bs4 import BeautifulSoup
 
 MANGA_MAIN_PATH = "Mangas"
 
@@ -31,22 +30,15 @@ def find_last_chapter(manga_title: str) -> int:
     :return: the
     """
     print('Finding the last chapter...')
-    chapter = 1
 
     url_template = f'https://www.mangatigre.net/manga/{manga_title}'
 
     response = requests.get(url_template)
     soup = BeautifulSoup(response.text, 'html.parser')
-    li = soup.findAll('li')
-    print(li[0])
-    return 2
-
-    # while response.status_code == 200:
-    #     chapter += 1
-    #     url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
-    #     url = url_template.format(chapter=chapter)
-    #     response = requests.get(url)
-    # return chapter - 1
+    li_list = soup.findAll('li', {'class': 'pl-1 d-flex'})
+    last_chapter_url = li_list[0].a['href']
+    chapter_number = last_chapter_url.split('/')[-1]
+    return int(chapter_number)
 
 
 def create_path(dir_name: str) -> str:
@@ -56,15 +48,15 @@ def create_path(dir_name: str) -> str:
     manga_path = os.path.join(MANGA_MAIN_PATH, dir_name)
     if not os.path.exists(manga_path):
         os.makedirs(manga_path)
-    
+
     return manga_path
 
 
 def download_manga(
-    manga_title: Optional[str] = '',
-    download_last_chapter: Optional[bool] = False,
-    initial_chapter: Optional[int] = None,
-    final_chapter: Optional[int] = None,
+        manga_title: Optional[str] = '',
+        download_last_chapter: Optional[bool] = False,
+        initial_chapter: Optional[int] = None,
+        final_chapter: Optional[int] = None,
 ) -> None:
     """
     Download a manga from Manga Tigre
@@ -77,6 +69,8 @@ def download_manga(
     manga_title = manga_title.replace(' ', '-')
     manga_url = check_manga_url(manga_title)
     parent_dir = create_path(manga_title)
+
+    print('Manga found! Downloading...')
 
     if initial_chapter is None and final_chapter is None:
         initial_chapter = 1 if not download_last_chapter else find_last_chapter(manga_title)
