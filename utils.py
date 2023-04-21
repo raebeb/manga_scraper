@@ -33,15 +33,20 @@ def find_last_chapter(manga_title:str) -> int:
     print('Finding the last chapter...')
     chapter = 1
 
-    url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
-    url = url_template.format(chapter=chapter)
-    response = requests.get(url)
-    while response.status_code == 200:
-        chapter += 1
-        url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
-        url = url_template.format(chapter=chapter)
-        response = requests.get(url)
-    return chapter - 1
+    url_template = f'https://www.mangatigre.net/manga/{manga_title}'
+
+    response = requests.get(url_template)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    li = soup.findAll('li')
+    print(li[0])
+    return 2
+
+    # while response.status_code == 200:
+    #     chapter += 1
+    #     url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
+    #     url = url_template.format(chapter=chapter)
+    #     response = requests.get(url)
+    # return chapter - 1
 
 def download_manga(initial_chapter:int = None, final_chapter:int = None, manga_title:str = '', download_last_chapter:bool = False) -> None:
     """
