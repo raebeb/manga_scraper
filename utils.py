@@ -56,7 +56,8 @@ def download_manga(
         manga_title: Optional[str] = '',
         download_last_chapter: Optional[bool] = False,
         initial_chapter: Optional[int] = None,
-        final_chapter: Optional[int] = None,
+        final_chapter: Optional[str] = 'last',
+        single_chapter: Optional[int] = None
 ) -> None:
     """
     Download a manga from Manga Tigre
@@ -64,18 +65,30 @@ def download_manga(
     :param final_chapter: the final chapter to download
     :param manga_title: title of the manga
     :param download_last_chapter: check if the user wants to download the last chapter
+    :param single_chapter: check if the user wants to download a single chapter
     :return: None
     """
     manga_title = manga_title.replace(' ', '-')
-    manga_url = check_manga_url(manga_title)
     parent_dir = create_path(manga_title)
 
     print('Manga found! Downloading...')
+    if single_chapter is not None:
+        initial_chapter = single_chapter
+        final_chapter = single_chapter
 
-    if initial_chapter is None and final_chapter is None:
+    if final_chapter == 'last':
+        final_chapter = find_last_chapter(manga_title)
+    if final_chapter is not None and single_chapter is None:
+        final_chapter = int(final_chapter)
+
+    if initial_chapter is None and final_chapter is None and single_chapter is None:
         initial_chapter = 1 if not download_last_chapter else find_last_chapter(manga_title)
         final_chapter = find_last_chapter(manga_title) if not download_last_chapter else initial_chapter
         print('The last chapter is: ', final_chapter)
+
+    if final_chapter < initial_chapter:
+        raise Exception('The initial chapter must be less than the final chapter')
+
 
     for chapter in range(initial_chapter, final_chapter + 1):
         percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2) if final_chapter != initial_chapter else 100
