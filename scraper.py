@@ -5,7 +5,7 @@ from utils import download_manga
 
 
 if __name__ == "__main__":
-    myopts, _ = getopt(sys.argv[1:], "n:i:f:l:")
+    myopts, _ = getopt(sys.argv[1:], "n:i:f:l:s:")
     if not myopts:
         raise KeyError("There's no exists not exists any argument")
 
@@ -23,11 +23,15 @@ if __name__ == "__main__":
         },
         "-f": {
             "variable": "final_chapter",
-            "type": int,
+            "type": str,
         },
         "-l": {
             "variable": "download_last_chapter",
             "type": bool,
+        },
+        "-s": {
+            "variable": "single_chapter",
+            "type": int,
         },
     }
 
