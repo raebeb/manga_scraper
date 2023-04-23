@@ -26,15 +26,58 @@ git clone git@github.com:raebeb/manga_scraper.git
 ```
 git clone https://github.com/raebeb/manga_scraper.git
 ```
+> En caso de no tener git instalado (y no tener la intencion ni la necesida de hacerlo) se puede descargar el repositorio como zip 
+![image](https://user-images.githubusercontent.com/27713965/233815307-a77df529-2633-4791-8229-b30ca9db8b7b.png)
+
+
+### 2. Descarga e instala Python 
+
+Sigue las instrucciones de https://www.python.org/downloads/
+
+### 3. Instalar PIP
+
+En este sitio estan detalladas la instrucciones para descargar e instalar pip segun tu sistema operativo https://tecnonucleous.com/2018/01/28/como-instalar-pip-para-python-en-windows-mac-y-linux/
+
+
 ---
 
 ### 2. Ejecucion
-En la raiz del proyecto ejecutar el comando ```python3 scraper.py``` esto mostrara un menu como el siguiente
-![image](https://user-images.githubusercontent.com/27713965/232952185-26e02ac2-336a-47fd-9924-1622343eaee8.png)
-* Opcion 1: Descarga todos los capitulos del manga que ingreses
-* Opcion 2: Descarga solo los mangas que indiques entre x e y, 
-* Opcion 3: Descarga solo un capitulo del manga
-* Opcion 4: Descarga solo el ultimo capitulo
+## Instalar librerias necesarias
+
+Para esto es necesario en la raiz del proyecto ejecutar el siguiente comando  
+```pip install -r requirements.txt```
+> en caso de que el comando anterior falle probar con ```pip3 install -r requirements.txt```
+
+una vez que se hayan instalado todas las dependencias podemos seguir con el siguiente paso
+
+## Descargar los mangas
+A continuacion se detallaran ejemplos de los distintos modos para descargar mangas
+### 1.- Descargar todos los capitulos de un manga  
+El siguiente comando descarga todos los capitulos del manga especificado  
+``` python3 scraper.py -n 'boruto' -i 1 -f last ```
+
+### 2. Descargar una serie de capitulos de un manga entre x e y  
+El siguiente comando descargara solo los capitulos que se encuentren entre los valores espeficiados (incluyendolos), en el ejemplo descargara desde el capitulo 4 hasta el capitulo 21
+``` python3 scraper.py -n 'blue lock' -i 4 -f 21 ```  
+> En este comando es necesario que el valor que se especifica en el valor de la bandera -i sea menor al valor de la bandera -f, en caso contrario arrojara una exepcion
+> En el caso de que el capitulo especificado en la bandera -f sea mayor al ultimo capitulo existente del manga especificado el script descargara hasta el ultimo capitulo existente y luego arrojara una excepcion
+
+### 3. Descargar solo un capitulo de un manga
+El siguiente comando descargara solo un capitulo del manga especificado, en el ejemplo seria el capitulo numero 3  
+``` python3 scraper.py -n 'one piece' -s 3 ```
+
+### 4. Descargar desde un capitulo x hasta el ulttimo
+El siguiente comando descargara una serie de capitulos iniciando e incluyendo al especificado en la bandera -i hasta el ultimo  
+``` python3 scraper.py -n 'Trigun' -i 4 -f last ```
+
+### 5. Descargar solo el ultimo capitulo de un manga
+El siguiente comando solo descargara el ultimo capitulo existente del manga   
+``` python3 scraper.py -n 'Vinland Saga' -l true ```
+
+## Significado de banderitas
+* *-n* : Nombre del manga, es obligatorio en todos los comandos, el nombre de los mangas debe ir **SIEMPRE** entre comillas
+* *-i* : Capitulo inicial del manga, indica desde que capitulo se comenzara a descargar, es de caracter opcional, pero 
+
 
 Los mangas quedaran guardados en la raiz del proyecto en carpetas con el mismo nombre  
 ![image](https://user-images.githubusercontent.com/27713965/232956045-bb0bf0b7-cbdc-411c-8f82-c13c7cfd0e68.png)
@@ -78,5 +121,5 @@ Las carpetas quedan listas para ser importadas directamente en el software de [K
 ## Trabajos futuros:
 - [ ] Elejir la ruta donde almacenar los mangas descargados
 - [ ] Agregar tests
-- [ ] Optimizar la busqueda del ultimo capitulo
+- [x] Optimizar la busqueda del ultimo capitulo
 - [ ] Opcion para descargar solo imagenes o transformarlas ya a MOBI
