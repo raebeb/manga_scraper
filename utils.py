@@ -76,7 +76,7 @@ def download_manga(
         initial_chapter = single_chapter
         final_chapter = single_chapter
 
-    if final_chapter == 'last':
+    if final_chapter == 'last' or download_last_chapter:
         final_chapter = find_last_chapter(manga_title)
     if final_chapter is not None and single_chapter is None:
         final_chapter = int(final_chapter)
@@ -85,6 +85,10 @@ def download_manga(
         initial_chapter = 1 if not download_last_chapter else find_last_chapter(manga_title)
         final_chapter = find_last_chapter(manga_title) if not download_last_chapter else initial_chapter
         print('The last chapter is: ', final_chapter)
+
+    if download_last_chapter:
+        initial_chapter = final_chapter
+
 
     if final_chapter < initial_chapter:
         raise Exception('The initial chapter must be less than the final chapter')
