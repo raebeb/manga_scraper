@@ -108,7 +108,7 @@ def download_manga(
         # Parse the HTML with BeautifulSoup
         soup = BeautifulSoup(response.text, 'html.parser')
         scripts = soup.findAll('script')
-        window_chapter = scripts[8].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
+        window_chapter = scripts[9].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
         chapter_dict = json.loads(window_chapter)
         images = chapter_dict['images']
 
