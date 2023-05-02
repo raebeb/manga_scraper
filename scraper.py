@@ -7,7 +7,7 @@ from utils import download_manga
 if __name__ == "__main__":
     myopts, _ = getopt(sys.argv[1:], "n:i:f:l:s:")
     if not myopts:
-        raise KeyError("There's no exists not exists any argument")
+        raise KeyError("There's no arguments!")
 
     manga_title = None
     params = {}
