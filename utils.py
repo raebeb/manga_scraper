@@ -68,7 +68,7 @@ def download_manga(
     :param single_chapter: check if the user wants to download a single chapter
     :return: None
     """
-    manga_title = manga_title.replace(' ', '-')
+    manga_title = manga_title.replace(' ', '-').lower()
     parent_dir = create_path(manga_title)
 
     print('Manga found! Downloading...')
@@ -116,6 +116,7 @@ def download_manga(
         for image in images:
             image_name = images[image]['name']
             image_url = f'https://i2.mtcdn.xyz/chapters/{manga_title}/{chapter}/{image_name}.webp'
+            print(image_url)
             images_list.append(image_url)
 
         # Create a directory for the current chapter
