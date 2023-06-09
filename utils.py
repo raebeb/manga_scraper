@@ -96,20 +96,24 @@ def download_manga(
 
     for chapter in range(initial_chapter, final_chapter + 1):
         percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2) if final_chapter != initial_chapter else 100
-        # Construct the URL for the current chapter
         print(f'Downloading chapter {chapter}... {percent}%')
         url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
         url = url_template.format(chapter=chapter)
         print(url)
 
-        # Send a GET request to the URL
         response = requests.get(url)
 
-        # Parse the HTML with BeautifulSoup
         soup = BeautifulSoup(response.text, 'html.parser')
         scripts = soup.findAll('script')
-        window_chapter = scripts[9].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
-        chapter_dict = json.loads(window_chapter)
+        window_chapter = scripts[8].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
+
+        try:
+            chapter_dict = json.loads(window_chapter)
+        except json.decoder.JSONDecodeError:
+            print('JSONDecodeError, trying again...')
+            window_chapter = scripts[9].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
+            chapter_dict = json.loads(window_chapter)
+            
         images = chapter_dict['images']
 
         images_list = []
@@ -119,23 +123,17 @@ def download_manga(
             print(image_url)
             images_list.append(image_url)
 
-        # Create a directory for the current chapter
         chapter_dir = f'{parent_dir}/chapter_{chapter}'
         if not os.path.exists(chapter_dir):
             os.makedirs(chapter_dir)
 
-        # Download each image
         count = 1
         for image_url in images_list:
-            # Construct the file name
             file_name = image_url.split('/')[-1]
             file_path = f'{chapter_dir}/image{count}_{file_name}'
 
-            # Send a GET request to the image URL
             response = requests.get(image_url, stream=True)
-            # print(response.content)
 
-            # Save the image to disk
             with open(file_path, 'wb') as f:
                 f.write(response.content)
 
