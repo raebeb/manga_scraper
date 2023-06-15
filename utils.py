@@ -51,6 +51,49 @@ def create_path(dir_name: str) -> str:
 
     return manga_path
 
+def get_chapters_list(manga_title: str, initial_chapter: float) -> list:
+    """
+    Get the list of all chapters of a manga
+    :param manga_title: title of the manga
+    :param initial_chapter: the initial chapter to download
+    :return: list of chapters
+    """
+    url_template = f'https://www.mangatigre.net/manga/{manga_title}/{initial_chapter}'
+
+    response = requests.get(url_template)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    li_list = soup.find('select', {'class': 'form-control rounded-sketch chapters-list mx-100 w-md-auto ml-md-0 mr-md-2 mb-2 mb-md-0 custom-select select-chapters'})
+    options = li_list.findAll('option')
+    chapters = []
+
+    for li in options:
+        chapter_number = li.get('value')
+        chapters.insert(0, chapter_number)
+
+    return chapters
+
+def download_images(parent_dir, manga_title, chapter, images):
+    images_list = []
+    for image in images:
+        image_name = images[image]['name']
+        image_url = f'https://i2.mtcdn.xyz/chapters/{manga_title}/{chapter}/{image_name}.webp'
+        images_list.append(image_url)
+
+    chapter_dir = f'{parent_dir}/chapter_{chapter}'
+    if not os.path.exists(chapter_dir):
+        os.makedirs(chapter_dir)
+
+    count = 1
+    for image_url in images_list:
+        file_name = image_url.split('/')[-1]
+        file_path = f'{chapter_dir}/image{count}_{file_name}'
+
+        response = requests.get(image_url, stream=True)
+
+        with open(file_path, 'wb') as f:
+            f.write(response.content)
+
+        count += 1
 
 def download_manga(
         manga_title: Optional[str] = '',
@@ -70,7 +113,7 @@ def download_manga(
     """
     manga_title = manga_title.replace(' ', '-').lower()
     parent_dir = create_path(manga_title)
-
+    chapter_list = get_chapters_list(manga_title, initial_chapter)
     print('Manga found! Downloading...')
     if single_chapter is not None:
         initial_chapter = single_chapter
@@ -94,7 +137,16 @@ def download_manga(
         raise Exception('The initial chapter must be less than the final chapter')
 
 
-    for chapter in range(initial_chapter, final_chapter + 1):
+    for chapter in chapter_list:
+        if '.' in chapter:
+            chapter = float(chapter)
+        else:
+            chapter = int(chapter)
+        if initial_chapter > chapter:
+            continue
+        if final_chapter < chapter:
+            break
+
         percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2) if final_chapter != initial_chapter else 100
         print(f'Downloading chapter {chapter}... {percent}%')
         url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
@@ -113,29 +165,8 @@ def download_manga(
             print('JSONDecodeError, trying again...')
             window_chapter = scripts[9].text.strip().replace('window.chapter = ', '').replace(';', '').replace('\'', '')
             chapter_dict = json.loads(window_chapter)
-            
+
         images = chapter_dict['images']
 
-        images_list = []
-        for image in images:
-            image_name = images[image]['name']
-            image_url = f'https://i2.mtcdn.xyz/chapters/{manga_title}/{chapter}/{image_name}.webp'
-            print(image_url)
-            images_list.append(image_url)
-
-        chapter_dir = f'{parent_dir}/chapter_{chapter}'
-        if not os.path.exists(chapter_dir):
-            os.makedirs(chapter_dir)
-
-        count = 1
-        for image_url in images_list:
-            file_name = image_url.split('/')[-1]
-            file_path = f'{chapter_dir}/image{count}_{file_name}'
-
-            response = requests.get(image_url, stream=True)
-
-            with open(file_path, 'wb') as f:
-                f.write(response.content)
-
-            count += 1
+        download_images(parent_dir, manga_title, chapter, images)
         print(f'Chapter {chapter} downloaded! {percent}%')
