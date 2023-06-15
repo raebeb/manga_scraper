@@ -41,5 +41,6 @@ if __name__ == "__main__":
 
     download_manga(**params)
 
-    print("Bye!")
+    print("Done!")
+    print("Bye! ฅ^•ﻌ•^ฅ ")
 
