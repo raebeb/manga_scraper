@@ -72,7 +72,15 @@ def get_chapters_list(manga_title: str, initial_chapter: float) -> list:
 
     return chapters
 
-def download_images(parent_dir, manga_title, chapter, images):
+def download_images(parent_dir: str, manga_title: str, chapter: int, images: dict) -> None:
+    """
+    Download the images of a chapter
+    :param parent_dir: directory of the manga
+    :param manga_title: title of the manga
+    :param chapter: number of the chapter
+    :param images: dict with the images
+    :return: None
+    """
     images_list = []
     for image in images:
         image_name = images[image]['name']
