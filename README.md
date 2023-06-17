@@ -52,40 +52,68 @@ Una vez que se hayan instalado todas las dependencias podemos seguir con el sigu
 
 ## Descargar los mangas
 A continuación se detallarán ejemplos de los distintos modos para descargar mangas
-El siguiente comando descarga todos los capítulos del manga especificado  
-``` python3 scraper.py -n 'boruto' -i 1 -f last ```
+
+### 1. Conoce los argumetos que puedes utilizar
+Ejecuta este comando para ver las diferentes opciones para descargar mangas
+
+``` 
+$ python3 scraper.py --help
+```
+output: 
+```bash 
+    
+usage: scraper.py [-h] [-i INITIAL_CHAPTER] [-f FINAL_CHAPTER] [-l] [-s SINGLE_CHAPTER] manga_title
+
+  Download manga from Manga Tigre.
+
+  positional arguments:
+    manga_title           Title of the manga
+
+  options:
+    -h, --help            show this help message and exit
+    -i INITIAL_CHAPTER, --initial_chapter INITIAL_CHAPTER
+                          Initial chapter to download
+    -f FINAL_CHAPTER, --final_chapter FINAL_CHAPTER
+                          Final chapter to download
+    -l, --download_last_chapter
+                          Download the last chapter
+    -s SINGLE_CHAPTER, --single_chapter SINGLE_CHAPTER
+                          Download a single chapter
+```
+
+### 2 Ejemplos de uso
+```bash
+# Por defecto sin bandera, te intentará descargar todos los capítulos
+python3 scraper.py 'blue lock' # es similar a  --initial_chapter 1 --final_chapter last
+
+# Descargar solo los capítulos que se encuentren entre los valores especificados (incluyéndolos)
+python3 scraper.py 'blue lock' --initial_chapter 4 --final_chapter 21
+python3 scraper.py 'blue lock' -i 4 -f 21
+
+# Descargar solo un capítulo del manga especificado, en el ejemplo sería el capítulo número 3
+python3 scraper.py 'one piece' --single_chapter 3
+python3 scraper.py 'one piece' -s 3
+
+# Descargar desde un capítulo x hasta el último
+python3 scraper.py 'Trigun' --initial_chapter 4 --final_chapter last
+python3 scraper.py 'Trigun' -i 4 -f last
+
+# Descargar solo el último capítulo de un manga
+python3 scraper.py 'Vinland Saga' --download_last_chapter
+python3 scraper.py 'Vinland Saga' -l 
+
+```
 
 
-### 2. Descargar una serie de capítulos de un manga entre x e y  
-El siguiente comando descargará solo los capítulos que se encuentren entre los valores especificados (incluyéndolos), en el ejemplo descargara desde el capítulo 4 hasta el capítulo 21
-``` python3 scraper.py -n 'blue lock' -i 4 -f 21 ```  
-> En este comando es necesario que el valor que se especifica en el valor de la bandera -i sea menor al valor de la bandera -f, en caso contrario arrojara una excepción
-> En el caso de que el capítulo especificado en la bandera -f sea mayor al último capítulo existente del manga especificado, el script descargara hasta el último capítulo existente y luego arrojara una excepción
+## Significado de las opciones
+* `manga_title`: Nombre del manga, es obligatorio en todos los comandos, el nombre de los mangas debe ir **SIEMPRE** con comillas.
+* `-i`, `--initial_chapter`: Capítulo inicial del manga, indica desde que capitulo se comenzara a descargar, es de caracter opcional, pero si se usa se debe usar la opción `--final_chapter`.
+* `-f`, `--final_chapter`: Capítulo final del manga, indica hasta que capitulo incluyéndolo se descargará.
+* `-s`, `--single_chapter`: Descargará solo el capítulo indicado.
+* `-l`, `--download_last_chapter`: Se utiliza para descargar solo el último capítulo.
 
 
-### 3. Descargar solo un capítulo de un manga
-El siguiente comando descargará solo un capítulo del manga especificado, en el ejemplo sería el capítulo número 3  
-``` python3 scraper.py -n 'one piece' -s 3 ```
-
-
-### 4. Descargar desde un capítulo x hasta el último
-El siguiente comando descargará una serie de capítulos iniciando e incluyendo al especificado en la bandera -i hasta el último  
-``` python3 scraper.py -n 'Trigun' -i 4 -f last ```
-
-
-### 5. Descargar solo el último capítulo de un manga
-El siguiente comando solo descargará el último capítulo existente del manga   
-``` python3 scraper.py -n 'Vinland Saga' -l true ```
-
-
-## Significado de banderitas
-* *-n* : Nombre del manga, es obligatorio en todos los comandos, el nombre de los mangas debe ir **SIEMPRE** entre comillas
-* *-i* : Initial chapter, capítulo inicial del manga, indica desde que capitulo se comenzara a descargar, es de caracter opcional, pero si se usa se debe usar la banderita -f
-* *-f* : Final chapter, capítulo final del manga, indica hasta que capitulo incluyéndolo
-* *-s* : single chapter, descargará solo el capítulo indicado
-* *-l* : Last chapter, se utiliza para descargar solo el último capítulo, debe ir acompañado de la palabra true
-
-
+# Después qué?
 
 
 Los mangas quedarán guardados en la raíz del proyecto en una carpeta llamada Mangas  
