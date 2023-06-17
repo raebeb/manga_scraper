@@ -83,6 +83,9 @@ usage: scraper.py [-h] [-i INITIAL_CHAPTER] [-f FINAL_CHAPTER] [-l] [-s SINGLE_C
 
 ### 2 Ejemplos de uso
 ```bash
+# Por defecto sin bandera, te intentará descargar todos los capítulos
+python3 scraper.py 'blue lock' # es similar a  --initial_chapter 1 --final_chapter last
+
 # Descargar solo los capítulos que se encuentren entre los valores especificados (incluyéndolos)
 python3 scraper.py 'blue lock' --initial_chapter 4 --final_chapter 21
 python3 scraper.py 'blue lock' -i 4 -f 21
@@ -103,7 +106,7 @@ python3 scraper.py 'Vinland Saga' -l
 
 
 ## Significado de las opciones
-* `manga_title`: Nombre del manga, es obligatorio en todos los comandos, el nombre de los mangas debe ir **SIEMPRE** sin comillas.
+* `manga_title`: Nombre del manga, es obligatorio en todos los comandos, el nombre de los mangas debe ir **SIEMPRE** con comillas.
 * `-i`, `--initial_chapter`: Capítulo inicial del manga, indica desde que capitulo se comenzara a descargar, es de caracter opcional, pero si se usa se debe usar la opción `--final_chapter`.
 * `-f`, `--final_chapter`: Capítulo final del manga, indica hasta que capitulo incluyéndolo se descargará.
 * `-s`, `--single_chapter`: Descargará solo el capítulo indicado.

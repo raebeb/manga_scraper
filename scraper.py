@@ -5,8 +5,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download manga from Manga Tigre.')
 
     parser.add_argument('manga_title', type=str, help='Title of the manga')
-    parser.add_argument('-i', '--initial_chapter', type=int, help='Initial chapter to download')
-    parser.add_argument('-f', '--final_chapter', type=str, help='Final chapter to download')
+    parser.add_argument('-i', '--initial_chapter', type=int, help='Initial chapter to download', default=1)
+    parser.add_argument('-f', '--final_chapter', type=str, help='Final chapter to download', default='last')
     parser.add_argument('-l', '--download_last_chapter', action='store_true', help='Download the last chapter')
     parser.add_argument('-s', '--single_chapter', type=int, help='Download a single chapter')
 
