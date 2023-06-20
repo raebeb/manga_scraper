@@ -1,4 +1,5 @@
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)  
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/raebeb)
 # MANGA DOWNLOADER 🚣📄🗺
 Quería leer vinland saga en mi Kindle, pero no encontraba donde descargarlo así que me vi en la obligación de hacer un script que descargue las imágenes para luego pasarlas a formato MOBI  
 Luego de descargar los capítulos que quería leer me di cuenta que podría hacer que el script funcionara para cualquier manga, así fue que nació esto ฅ^•ﻌ•^ฅ  
