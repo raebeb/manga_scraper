@@ -57,7 +57,7 @@ A continuación se detallarán ejemplos de los distintos modos para descargar ma
 ### 1. Conoce los argumetos que puedes utilizar
 Ejecuta este comando para ver las diferentes opciones para descargar mangas
 
-``` 
+```bash 
 $ python3 scraper.py --help
 ```
 output: 
@@ -166,8 +166,22 @@ Las carpetas quedan listas para ser importadas directamente en el software de [K
 ## Como contribuir? 📝
 Este proyecto está abierto a contribuciones. Aquí hay algunas formas en las que puedes contribuir:
 
-1- Fork del repositorio a tu cuenta de GitHub.  
-2- Clona el repositorio a tu máquina local.
+1. Fork del repositorio a tu cuenta de GitHub.  
+2. Clona el repositorio a tu máquina local.
+
+```bash
+git clone git@github.com:tuNombreDeUsuario/manga_scraper.git
+```
+3. Crea una nueva rama para trabajar en la característica o corrección que desees hacer.  
+```bash
+git checkout -b nombre-de-tu-rama
+```
+4. Realiza tus cambios y haz un commit con una descripción concisa y clara de tus cambios.
+5. Haz push de tu rama a tu fork en GitHub.
+```
+git push origin nombre-de-tu-rama
+```
+
 
 
 
@@ -203,4 +217,5 @@ Este proyecto está abierto a contribuciones. Aquí hay algunas formas en las qu
 - [ ] Elejir la ruta donde almacenar los mangas descargados
 - [ ] Agregar tests
 - [x] Optimizar la busqueda del ultimo capitulo
-- [ ] Opcion para descargar solo imagenes o transformarlas ya a MOBI
+- [x] Opcion para descargar solo imagenes o transformarlas ya a MOBI
+    - [ ] Opcion para seleccionar solo algunas carpetas de capitulos
