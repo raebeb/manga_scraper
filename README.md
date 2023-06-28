@@ -127,7 +127,30 @@ Cada capítulo queda guardado en una carpeta independiente con el número corres
 ![image](https://user-images.githubusercontent.com/27713965/234107570-7b08fc14-fe74-4293-b981-c255a87dfff6.png)
 
 
+# Pasar imagenes a EPUB
+## Opcion 1
+Para pasar los mangas recien descargados o que ya tengamos dentro de la carpeta ```/Mangas``` debemos ejecutar lo siguiente en la terminal:  
+```python3 epub.py```  
+  
+Esto nos desplegara una lista con los mangas que ya tenemos descargados  
+![image](https://github.com/raebeb/manga_scraper/assets/27713965/1fe7bba4-5fba-4af8-8d12-9c47ea21e77b)  
+  
+Seguido del siguiente mensaje:  
+![image](https://github.com/raebeb/manga_scraper/assets/27713965/b29e7b26-e8fe-4f01-aa2a-fba19d828c72)  
+aqui tenemos que ingresar cualquier de los numeros que se muestran junto al nombre del manga  
+  
+Una vez ingresado el numero correspondiente al manga que queremos transformar y comenzara a transformar todas las carpetas con capitulos a **un archivo epub**  
+![image](https://github.com/raebeb/manga_scraper/assets/27713965/b2dd6952-4eeb-4a53-89bd-0e7f8dbb4d33)
+> si, esta mal calculado el porcentaje, lo arreglare
 
+Una vez finalizado el proceso en la raiz de nuestro proyecto nos encontraremos con una carpeta llamada ```/Epubs```, dentro de esta habran carpetas con los nobres de los managas y dentro de estas los archivos epub
+```
+/Epubs
+    |-- /Trigun
+        |-- trigun.epub
+```
+
+## Opción 2
 
 Las carpetas quedan listas para ser importadas directamente en el software de [KindleComicConverter](https://kcc.iosphe.re/) a formato MOBI o EPUB y luego subidas a la Kindle ya sea por correo o usando [Calibre](https://calibre-ebook.com/)
 
@@ -140,7 +163,11 @@ Las carpetas quedan listas para ser importadas directamente en el software de [K
 
 
 ***
+## Como contribuir? 📝
+Este proyecto está abierto a contribuciones. Aquí hay algunas formas en las que puedes contribuir:
 
+1- Fork del repositorio a tu cuenta de GitHub.  
+2- Clona el repositorio a tu máquina local.
 
 
 
