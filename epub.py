@@ -2,6 +2,7 @@ from PIL import Image
 from ebooklib import epub
 import os
 
+EPUB_FILES_PATH = './Epubs'
 
 def get_all_manga_folders() -> list:
     """
@@ -30,54 +31,82 @@ def show_and_select_a_manga_folder() -> str:
 
     return manga_name
 
+def create_output_folder(manga_name: str) -> str:
+    """
+    :param manga_name: name of the manga
+    :return: str with the outputh path created
+    """
+    if not os.path.exists(EPUB_FILES_PATH):
+        os.makedirs(EPUB_FILES_PATH)
+    if not os.path.exists(os.path.join(EPUB_FILES_PATH, manga_name)):
+        os.makedirs(os.path.join(EPUB_FILES_PATH, manga_name))
+
+    return os.path.join(EPUB_FILES_PATH, manga_name, f'{manga_name}.epub')
 
 def transform_manga_images_to_epub() -> None:
     """
-    Transform manga images to epub
+    Transform manga images to epub file
     :return: None
     """
-    percent = 0
     manga_name = show_and_select_a_manga_folder()
-    manga_path = f'./Mangas/{manga_name}'
-    manga_chapters = os.listdir(manga_path)
-    manga_chapters.sort()
+
+    manga_folder_path = os.path.join('./Mangas', manga_name)
+    output_path = create_output_folder(manga_name)
 
     book = epub.EpubBook()
-    book.set_identifier('id123456')
-    book.set_title(manga_name)
-    book.add_author('Manga Tigre')
+    book.set_identifier(f'{manga_name}')
+    book.set_title(f'{manga_name}')
+    book.set_language('en')
+    manga_title = os.path.basename(manga_folder_path).replace('_', ' ').title()
 
-    for manga_chapter in manga_chapters:
-        print(f'Chapter {manga_chapter} - {percent}%')
-        percent = round((manga_chapters.index(manga_chapter) / len(manga_chapters)) * 100, 2)
-        chapter_path = f'{manga_path}/{manga_chapter}'
-        chapter_images = os.listdir(chapter_path)
-        chapter_images.sort()
+    percentage = 0
+    spine_items = []
+    chapter_list = os.listdir(manga_folder_path)
+    chapter_list.sort(key=lambda x: int(x.split('_')[-1]))
+    chapter_index = chapter_list[0].split('_')[-1]
 
-        chapter = epub.EpubHtml(title=f'Chapter {manga_chapter}')
-        chapter.set_content(f'<h1>Chapter {manga_chapter}</h1><br><br>')
+    for chapter_folder in chapter_list:
+        chapter_index = int(chapter_index)
+        print(f'[{percentage}%] - {chapter_folder}')
+        percentage = round((int(chapter_index) / len(os.listdir(manga_folder_path))) * 100, 2)
+        chapter_path = os.path.join(manga_folder_path, chapter_folder)
 
-        for chapter_image in chapter_images:
-            image_path = f'{chapter_path}/{chapter_image}'
-            image = Image.open(image_path)
-            width, height = image.size
-            # image = image.resize((int(width / 2), int(height / 2)))
-            image.save(image_path)
+        if os.path.isdir(chapter_path):
+            chapter_title = f'Chapter {chapter_index}'
+            image_html = ''
 
-            image_item = epub.EpubImage(uid=chapter_image, file_name=chapter_image, media_type='image/jpeg')
+            image_list = os.listdir(chapter_path)
+            image_list.sort(key=lambda x: int(x.split('_')[-2].split('.')[0].replace('image', '')))
+            for filename in image_list:
+                if filename.endswith('.webp'):
+                    image_path = os.path.join(chapter_path, filename)
+                    image = Image.open(image_path)
 
+                    image_item = epub.EpubImage()  # Changed this line to EpubImage
+                    image_item.file_name = filename  # Using property methods to set the values
+                    image_item.media_type = 'image/webp'
+                    image_item.content = open(image_path, 'rb').read()  # Set content to the binary data of the image
 
-            chapter.add_item(image_item)
-            # chapter.set_content(f'<img src="{chapter_image}">')
+                    book.add_item(image_item)
 
-        book.add_item(chapter)
+                    # Adding each image to the chapter's html content
+                    image_html += f'<p><img src="{filename}" alt="image"/></p>'
 
-        book.toc = (epub.Link(f'{manga_chapter}.xhtml', f'{manga_chapter}', f'{manga_chapter}'),)
+            c = epub.EpubHtml(title=chapter_title, file_name=f'chapter_{chapter_index}.xhtml')
+            c.content = f'<h1>{chapter_title}</h1>{image_html}'
+            book.add_item(c)
+            spine_items.append(c)
 
-    output = f'./Mangas/{manga_name}/{manga_name}.epub'
-    epub.write_epub(output, book, {})
+            chapter_index += 1
 
-    print(f'Chapters: {manga_chapters}')
+    book.spine = spine_items
+
+    section = epub.Section(manga_title)
+    book.toc.append(section)
+
+    book.add_item(epub.EpubNcx())
+    book.add_item(epub.EpubNav())
+    epub.write_epub(output_path, book, {})
 
 
 transform_manga_images_to_epub()
