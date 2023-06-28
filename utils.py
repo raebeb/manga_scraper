@@ -92,7 +92,10 @@ def download_images(parent_dir: str, manga_title: str, chapter: int, images: dic
         os.makedirs(chapter_dir)
 
     count = 1
+    percentage = 0
+    print(f'\nDownloading images from chapter {chapter}\n')
     for image_url in images_list:
+        print(f'{int(percentage)}%')
         file_name = image_url.split('/')[-1]
         file_path = f'{chapter_dir}/image{count}_{file_name}'
 
@@ -102,6 +105,9 @@ def download_images(parent_dir: str, manga_title: str, chapter: int, images: dic
             f.write(response.content)
 
         count += 1
+        percentage += 100 / len(images_list)
+    print('100%')
+    print('DONE!\n')
 
 def download_manga(
         manga_title: Optional[str] = '',
@@ -156,10 +162,10 @@ def download_manga(
             break
 
         percent = round((chapter - initial_chapter) / (final_chapter - initial_chapter) * 100, 2) if final_chapter != initial_chapter else 100
-        print(f'Downloading chapter {chapter}... {percent}%')
+        print('╌──═❁═──╌' * 5)
+        print(f'\n\nDownloading chapter {chapter}... {percent}% Completed\n\n')
         url_template = f'https://www.mangatigre.net/manga/{manga_title}/{chapter}'
         url = url_template.format(chapter=chapter)
-        print(url)
 
         response = requests.get(url)
 
