@@ -38,7 +38,7 @@ def find_last_chapter(manga_title: str) -> int:
     li_list = soup.findAll('li', {'class': 'pl-1 d-flex'})
     last_chapter_url = li_list[0].a['href']
     chapter_number = last_chapter_url.split('/')[-1]
-    return int(chapter_number)
+    return chapter_number
 
 
 def create_path(dir_name: str) -> str:
@@ -136,7 +136,7 @@ def download_manga(
     if final_chapter == 'last' or download_last_chapter:
         final_chapter = find_last_chapter(manga_title)
     if final_chapter is not None and single_chapter is None:
-        final_chapter = int(final_chapter)
+        final_chapter = int(final_chapter) if '.' not in final_chapter else float(final_chapter)
 
     if initial_chapter is None and final_chapter is None and single_chapter is None:
         initial_chapter = 1 if not download_last_chapter else find_last_chapter(manga_title)
